@@ -58,7 +58,7 @@
                         <tr v-for="currency in currencies" v-show="showall || typeof(balances[currency.ticker]) != 'undefined'">
                             <td>{{currency.ticker}}</td>
                             <td>{{currency.name}}</td>
-                            <td>{{currency.price}} USD</td>
+                            <td>{{currency.price.toFixed(2)}} USD</td>
                             <td><input type="number" v-model="balances[currency.ticker]" ></td>
                             <td>{{ Number( (typeof(balances[currency.ticker]) != 'undefined' ? balances[currency.ticker] : "0" ) * currency.price ).toFixed(2) }} USD</td>
                         </tr>
@@ -128,7 +128,7 @@
                         this.currencies.push({
                             'ticker' : ticker.symbol,
                             'name' : ticker.name,
-                            'price' : parseFloat(ticker.priceUsd).toFixed(2)
+                            'price' : parseFloat(ticker.priceUsd)
                         })
                     ))
                 }
