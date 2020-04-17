@@ -112,7 +112,10 @@
                 axios.get('https://api.coincap.io/v2/assets')
                     .then(response => ( this.parseApi(response) ))
                 
-                this.balances = JSON.parse(localStorage.getItem('balances'))
+                if(localStorage.getItem('balances') !== null){
+                    this.balances = JSON.parse(localStorage.getItem('balances'))
+                    this.showall = false
+                }
             },
             methods: {
                 saveBalances() {
