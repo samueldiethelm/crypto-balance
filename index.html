@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <title>crypto balance</title>
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/style.css">
+
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    </head>
+    <body>
+        <div id="app">
+            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="container">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="index.html">Crypto Balance</a>
+                    </div>
+                    <ul class="nav navbar-nav">
+                        <li :class="{'active':page=='home'}"><a href="#" @click="page='home'" >Home</a></li>
+                        <li :class="{'active':page=='about'}"><a href="#" @click="page='about'">About</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <input class="navbar-form form-control" :class="[showall ? 'btn-primary' : '']" type="button" :value="[showall ? 'Hide Empty' : 'Show All']" @click="showall = !showall">
+                        </li>
+                        <li>
+                            <input class="navbar-form form-control" type="button" value="Save" @click="saveBalances">
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+
+            <div class="container" v-if="page=='home'">
+                <div class="page-header">
+                    <h1>Top cryptcurrencies</h1>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Amount</th>
+                            <th>{{total.toFixed(2)}}USD</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="currency in currencies" v-show="showall || typeof(balances[currency.ticker]) != 'undefined'">
+                            <td>{{currency.ticker}}</td>
+                            <td>{{currency.name}}</td>
+                            <td>{{currency.price}} USD</td>
+                            <td><input type="number" v-model="balances[currency.ticker]" ></td>
+                            <td>{{ Number( (typeof(balances[currency.ticker]) != 'undefined' ? balances[currency.ticker] : "0" ) * currency.price ).toFixed(2) }} USD</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="container" v-if="page=='about'">
+                <div class="page-header">
+                    <h1>About</h1>
+                    <p>This site is a small single page application on VueJS. Cryptocurrency rates are obtained from the 
+                        CoinCap.io API. Balances are stored in your browser's <a href="https://www.w3schools.com/html/html5_webstorage.asp" target="_blank">localStorage</a>. 
+                        Your banace therefore stays private and is not sent or stored on any server. Since no server application is required, this site is hosted on GirHub pages.</p>
+                    <p>Enter the amount you have of each cryptocurrency in each row and click save to save it to your browser storage.</p>
+
+                    <h2>Links</h2>
+                    <ul>
+                        <li><a href="https://github.com/samueldiethelm/crypto-balance" target="_blank">GitHub repository</a></li>
+                        <li><a href="https://docs.coincap.io/?version=latest" target="_blank">Coincap.io API</a></li>
+                        <li><a href="https://vuejs.org/">Vue JS</a></li>
+                    </ul>
+                </div>
+            </div>
+
+
+            
+        </div>
+        <script type="text/javascript">
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                showall: true,
+                page: 'home',
+                apiReturn: [],
+                balances: {},
+                currencies : []
+            },
+            computed:{
+                total: function(){
+                    var total = 0.0
+                    this.currencies.forEach(function(currency){
+                        console.log(app.balances)
+                        if(typeof(app.balances[currency.ticker]) != 'undefined')
+                            total += app.balances[currency.ticker] * currency.price;
+                    })
+                    return total
+                }
+            },
+            mounted() {
+                axios.get('https://api.coincap.io/v2/assets')
+                    .then(response => ( this.parseApi(response) ))
+                
+                this.balances = JSON.parse(localStorage.getItem('balances'))
+            },
+            methods: {
+                saveBalances() {
+                    localStorage.setItem('balances',JSON.stringify(this.balances))
+                },
+                parseApi(response) {
+                    console.log(response.data.data)
+                    this.currencies = []
+                    response.data.data.forEach(ticker => (
+                        this.currencies.push({
+                            'ticker' : ticker.symbol,
+                            'name' : ticker.name,
+                            'price' : parseFloat(ticker.priceUsd).toFixed(2)
+                        })
+                    ))
+                }
+            }
+        })
+        </script>
+    </body>
+</html>
