@@ -27,6 +27,7 @@
                     <ul class="nav navbar-nav">
                         <li :class="{'active':page=='home'}"><a href="#" @click="page='home'" >Home</a></li>
                         <li :class="{'active':page=='about'}"><a href="#" @click="page='about'">About</a></li>
+                        <li><a :href="exportUrl" download="crypto-balance.json" @click="prepareExportUrl()">Export</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li>
@@ -95,7 +96,8 @@
                 page: 'home',
                 apiReturn: [],
                 balances: {},
-                currencies : []
+                currencies : [],
+                exportUrl : '#'
             },
             computed:{
                 total: function(){
@@ -117,6 +119,14 @@
                 }
             },
             methods: {
+                prepareExportUrl(){
+                    var data = JSON.stringify(this.balances)
+                    var type = 'application/json'
+
+                    this.exportUrl = window.URL.createObjectURL(
+                        new Blob([data], { type })
+                    );
+                },
                 balanceIsEmpty(ticker){
                     if (typeof(this.balances[ticker]) != 'undefined' && this.balances[ticker] > 0 ) 
                         return false
