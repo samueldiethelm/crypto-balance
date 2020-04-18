@@ -52,16 +52,16 @@
                             <th>Name</th>
                             <th>Price</th>
                             <th>Amount</th>
-                            <th>{{total.toFixed(2)}} USD</th>
+                            <th>{{(total * fiat[baseFiat] ).toFixed(2)}} {{baseFiat}}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="currency in currencies" v-show="showall || !balanceIsEmpty(currency.ticker)">
                             <td>{{currency.ticker}}</td>
                             <td>{{currency.name}}</td>
-                            <td>{{currency.price.toFixed(2)}} USD</td>
+                            <td>{{(currency.price * fiat[baseFiat]).toFixed(2)}} USD</td>
                             <td><input type="number" v-model="balances[currency.ticker]" ></td>
-                            <td>{{ Number( (typeof(balances[currency.ticker]) != 'undefined' ? balances[currency.ticker] : "0" ) * currency.price ).toFixed(2) }} USD</td>
+                            <td>{{ Number( (typeof(balances[currency.ticker]) != 'undefined' ? balances[currency.ticker] : "0" ) * currency.price * fiat[baseFiat] ).toFixed(2) }} {{baseFiat}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -148,6 +148,10 @@
                     this.balances = JSON.parse(localStorage.getItem('balances'))
                     this.showall = false
                 }
+
+                if(localStorage.getItem('baseFiat') !== null ){
+                    this.baseFiat = localStorage.getItem('baseFiat')
+                }
             },
             methods: {
                 filesChange(files) {
@@ -180,6 +184,7 @@
                 },
                 saveBalances() {
                     localStorage.setItem('balances',JSON.stringify(this.balances))
+                    localStorage.setItem('baseFiat',this.baseFiat)
                 },
                 parseFiat(response) {
                     this.fiat = response.data.rates
