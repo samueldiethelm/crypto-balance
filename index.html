@@ -59,7 +59,7 @@
                         <tr v-for="currency in currencies" v-show="showall || !balanceIsEmpty(currency.ticker)">
                             <td>{{currency.ticker}}</td>
                             <td>{{currency.name}}</td>
-                            <td>{{(currency.price * fiat[baseFiat]).toFixed(2)}} USD</td>
+                            <td>{{(currency.price * fiat[baseFiat]).toFixed(2)}} {{baseFiat}}</td>
                             <td><input type="number" v-model="balances[currency.ticker]" ></td>
                             <td>{{ Number( (typeof(balances[currency.ticker]) != 'undefined' ? balances[currency.ticker] : "0" ) * currency.price * fiat[baseFiat] ).toFixed(2) }} {{baseFiat}}</td>
                         </tr>
