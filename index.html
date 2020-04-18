@@ -28,6 +28,7 @@
                         <li :class="{'active':page=='home'}"><a href="#" @click="page='home'" >Home</a></li>
                         <li :class="{'active':page=='about'}"><a href="#" @click="page='about'">About</a></li>
                         <li><a :href="exportUrl" download="crypto-balance.json" @click="prepareExportUrl()">Export</a></li>
+                        <li :class="{'active':page=='import'}"><a href="#" @click="page='import'">Import</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li>
@@ -83,6 +84,12 @@
                     </ul>
                 </div>
             </div>
+            <div class="container" v-if="page=='import'">
+                <div class="page-header"><h1>Import balances</h1></div>
+                <form enctype="multipart/form-data">
+                    <input type="file" accept="application/JSON" @change="filesChange($event.target.files)" >
+                </form>
+            </div>
 
 
             
@@ -119,6 +126,20 @@
                 }
             },
             methods: {
+                filesChange(files) {
+                    if (!files.length) return;
+                    
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        var contents = e.target.result
+                        app.loadJson(contents)
+                        app.page='home'
+                    };
+                    reader.readAsText(files[0]);
+                },
+                loadJson($json) {
+                    this.balances = JSON.parse($json)
+                },
                 prepareExportUrl(){
                     var data = JSON.stringify(this.balances)
                     var type = 'application/json'
