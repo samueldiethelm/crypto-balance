@@ -6,7 +6,7 @@
         <title>crypto balance</title>
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
-        
+
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -69,18 +69,28 @@
             <div class="container" v-if="page=='about'">
                 <div class="page-header">
                     <h1>About</h1>
+                </div>
+                <div>
                     <p>This site is a small single page application on VueJS. Cryptocurrency rates are obtained from the 
                         CoinCap.io API. Balances are stored in your browser's <a href="https://www.w3schools.com/html/html5_webstorage.asp" target="_blank">localStorage</a>. 
-                        Your balance therefore stays private and is not sent or stored on any server. Since no server application is required, this site is hosted on GitHub pages.</p>
+                        Your balance therefore stays private and is not sent or stored on any server.</p>
                     <p>Fiat currency conversion rates are obtained from exchangeratesapi.io.</p>
                     <p>Enter the amount you have of each cryptocurrency in each row and click save to save it to your browser storage.</p>
 
                     <h2>Links</h2>
                     <ul>
-                        <li><a href="https://github.com/samueldiethelm/crypto-balance" target="_blank">GitHub repository</a></li>
                         <li><a href="https://docs.coincap.io/?version=latest" target="_blank">Coincap.io API</a></li>
                         <li><a href="https://exchangeratesapi.io/" target="_blank">Exchange Rates API</a></li>
                         <li><a href="https://vuejs.org/">Vue JS</a></li>
+                    </ul>
+
+                    <h2>Donate</h2>
+                    <p>Feel free to donate if you wish to contribute to cover domain costs and future improvements.</p>
+                    <ul>
+                        <li>Bitcoin: 37m1MRBCCVm5cc386HLfjopQxk9wUm4gyR</li>
+                        <li>Bitcoin Cash: 136VUczgZG6Qrz7RyYnx7mAkqjdy2Lt3fG</li>
+                        <li>Litecoin: Lhs3y9YgRfpxSbrJEWx6ySSRYcYeVdX6ig</li>
+                        <li>Dogecoin: DRvYrymgSTC6N3G8rGdGWhYniyZnZojALM</li>
                     </ul>
                 </div>
             </div>
