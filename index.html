@@ -17,10 +17,10 @@
     </head>
     <body>
         <div id="app">
-            <nav class="navbar navbar-expand-sm bg-light" role="navigation" style="margin-bottom: 0">
+            <nav class="navbar navbar-expand-sm navbar-light bg-light" role="navigation" style="margin-bottom: 0">
                 <div class="container">
                     <div class="navbar-header">
-                        <a class="navbar-brand text-dark" href="#" @click="page='home'">Crypto Balance</a>
+                        <a class="navbar-brand" href="#" @click="page='home'">Crypto Balance</a>
                     </div>
 
                     <!-- Toggler/collapsibe Button -->
@@ -32,9 +32,9 @@
                     <div class="collapse navbar-collapse" id="collapsibleNavbar">
                         
                         <ul class="nav navbar-nav">
-                            <li class="nav-item" :class="{'active':page=='home'}"><a class="nav-link text-dark" href="#" @click="page='home'" >Home</a></li>
-                            <li class="nav-item" :class="{'active':page=='options'}"><a class="nav-link text-dark" href="#" @click="page='options'">Options</a></li>
-                            <li class="nav-item" :class="{'active':page=='about'}"><a class="nav-link text-dark" href="#" @click="page='about'">About</a></li>
+                            <li class="nav-item" :class="{'active':page=='home'}"><a class="nav-link" href="#" @click="page='home'" >Home</a></li>
+                            <li class="nav-item" :class="{'active':page=='options'}"><a class="nav-link" href="#" @click="page='options'">Options</a></li>
+                            <li class="nav-item" :class="{'active':page=='about'}"><a class="nav-link" href="#" @click="page='about'">About</a></li>
                         </ul> 
 
                         <ul class="nav navbar-nav ml-auto">
