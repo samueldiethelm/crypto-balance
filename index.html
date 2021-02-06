@@ -56,23 +56,25 @@
                 </div>
                 <div>
                     <div class="row border-bottom">
-                        <div class="col col-3 col-md-4 row py-1 my-auto">
+                        <div class="col col-12 col-sm-3 col-md-4 row py-1 my-auto d-none d-sm-block">
                             <div class="col-12 col-md-4">Symbol</div>
                             <div class="col-12 col-md-8">Name</div>
                         </div>
-                        <div class="col col-3 col-md-3 py-1 px-0 my-auto">Price</div>
-                        <div class="col col-3 col-md-2 py-1 px-0 my-auto">Amount</div>
-                        <div class="col col-3 col-md-3 py-1 px-0 my-auto text-right">{{(total * fiat[baseFiat] ).toFixed(2)}} {{baseFiat}}</div>
+                        <div class="col col-4 col-sm-3 col-md-3 py-1 my-auto">Price</div>
+                        <div class="col col-4 col-sm-3 col-md-2 py-1 my-auto">Amount</div>
+                        <div class="col col-4 col-sm-3 col-md-3 py-1 my-auto text-right">{{(total * fiat[baseFiat] ).toFixed(2)}} {{baseFiat}}</div>
                     </div>
 
                     <div class="row border-top" v-for="currency in currencies" v-show="showall || !balanceIsEmpty(currency.ticker)">
-                        <div class="col col-3 col-md-4 row py-1 my-auto">
-                            <div class="col-12 col-md-4">{{currency.ticker}}</div>
-                            <div class="col-12 col-md-8">{{currency.name}}</div>
+                        <div class="col col-12 col-sm-3 col-md-4 py-1 my-auto">
+                            <div class="row">
+                                <div class="col-4 col-sm-12 col-md-4">{{currency.ticker}}</div>
+                                <div class="col-8 col-sm-12 col-md-8">{{currency.name}}</div>
+                            </div>
                         </div>
-                        <div class="col col-3 col-md-3 py-1 px-0 my-auto">{{(currency.price * fiat[baseFiat]).toFixed(2)}} {{baseFiat}}</div>
-                        <div class="col col-3 col-md-2 py-1 px-0 my-auto"><input type="number" class="form-control" v-model="balances[currency.ticker]" ></div>
-                        <div class="col col-3 col-md-3 py-1 px-0 my-auto text-right">{{ Number( (typeof(balances[currency.ticker]) != 'undefined' ? balances[currency.ticker] : "0" ) * currency.price * fiat[baseFiat] ).toFixed(2) }} {{baseFiat}}</div>
+                        <div class="col col-4 col-sm-3 col-md-3 py-1 my-auto">{{(currency.price * fiat[baseFiat]).toFixed(2)}} {{baseFiat}}</div>
+                        <div class="col col-4 col-sm-3 col-md-2 py-1 my-auto"><input type="number" class="form-control" v-model="balances[currency.ticker]" ></div>
+                        <div class="col col-4 col-sm-3 col-md-3 py-1 my-auto text-right">{{ Number( (typeof(balances[currency.ticker]) != 'undefined' ? balances[currency.ticker] : "0" ) * currency.price * fiat[baseFiat] ).toFixed(2) }} {{baseFiat}}</div>
                     </div>
                 </div>
             </div>
