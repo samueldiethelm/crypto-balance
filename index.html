@@ -167,8 +167,14 @@
                 axios.get('https://api.coincap.io/v2/assets')
                     .then(response => ( this.parseApi(response) ))
 
-                axios.get('https://api.exchangeratesapi.io/latest?base=USD')
-                    .then(response => ( this.parseFiat(response)))
+                // axios.get('https://api.exchangeratesapi.io/latest?base=USD')
+                //     .then(response => ( this.parseFiat(response)))
+
+                //temporary fix:
+                this.fiat = {
+                    "USD":1.0,
+                    "EUR":0.84679
+                }
                 
                 if(localStorage.getItem('balances') !== null){
                     this.balances = JSON.parse(localStorage.getItem('balances'))
@@ -176,7 +182,8 @@
                 }
 
                 if(localStorage.getItem('baseFiat') !== null ){
-                    this.baseFiat = localStorage.getItem('baseFiat')
+                    // this.baseFiat = localStorage.getItem('baseFiat')
+                    this.baseFiat = 'USD'
                 }
             },
             methods: {
