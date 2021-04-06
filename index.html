@@ -89,13 +89,13 @@
                     <p>This site is a small single page application on VueJS. Cryptocurrency rates are obtained from the 
                         CoinCap.io API. Balances are stored in your browser's <a href="https://www.w3schools.com/html/html5_webstorage.asp" target="_blank">localStorage</a>. 
                         Your balance therefore stays private and is not sent or stored on any server.</p>
-                    <p>Fiat currency conversion rates are obtained from exchangeratesapi.io.</p>
+                    <p>Fiat currency conversion rates are obtained from ratesapi.io.</p>
                     <p>Enter the amount you have of each cryptocurrency in each row and click save to save it to your browser storage.</p>
 
                     <h2>Links</h2>
                     <ul>
                         <li><a href="https://docs.coincap.io/?version=latest" target="_blank">Coincap.io API</a></li>
-                        <li><a href="https://exchangeratesapi.io/" target="_blank">Exchange Rates API</a></li>
+                        <li><a href="https://ratesapi.io/" target="_blank">Rates API</a></li>
                         <li><a href="https://vuejs.org/">Vue JS</a></li>
                     </ul>
 
@@ -164,27 +164,22 @@
                 }
             },
             mounted() {
-                axios.get('https://api.coincap.io/v2/assets')
-                    .then(response => ( this.parseApi(response) ))
-
-                // axios.get('https://api.exchangeratesapi.io/latest?base=USD')
-                //     .then(response => ( this.parseFiat(response)))
-
-                //temporary fix:
-                this.fiat = {
-                    "USD":1.0,
-                    "EUR":0.84679
-                }
-                
                 if(localStorage.getItem('balances') !== null){
                     this.balances = JSON.parse(localStorage.getItem('balances'))
                     this.showall = false
                 }
 
                 if(localStorage.getItem('baseFiat') !== null ){
-                    // this.baseFiat = localStorage.getItem('baseFiat')
-                    this.baseFiat = 'USD'
+                    this.baseFiat = localStorage.getItem('baseFiat')
                 }
+
+                axios.get('https://api.coincap.io/v2/assets')
+                    .then(response => ( this.parseApi(response) ))
+
+                axios.get('https://api.ratesapi.io/api/latest?base=USD')
+                    .then(response => ( this.parseFiat(response)))
+                    .catch(this.parseDefaultFiat())
+                
             },
             methods: {
                 filesChange(files) {
@@ -220,7 +215,19 @@
                     localStorage.setItem('baseFiat',this.baseFiat)
                 },
                 parseFiat(response) {
-                    this.fiat = response.data.rates
+                    try {
+                        if(typeof(response.data.rates) == 'undefined'){
+                            throw "rates unavailable"
+                        }
+                        this.fiat = response.data.rates
+                    } catch (error) {
+                        console.error(error)
+                        this.parseDefaultFiat()
+                    }
+                },
+                parseDefaultFiat(){
+                    this.fiat = {"USD":1.0}
+                    this.baseFiat = "USD"
                 },
                 parseApi(response) {
                     this.currencies = []
