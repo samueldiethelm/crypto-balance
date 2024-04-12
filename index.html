@@ -157,7 +157,7 @@
                 page: 'home',
                 apiReturn: [],
                 balances: {},
-                fiat: {},
+                fiat: {"USD":1.0},
                 baseFiat: "USD",
                 currencies : [],
                 exportUrl : '#'
@@ -178,15 +178,16 @@
                     this.showall = false
                 }
 
-                if(localStorage.getItem('baseFiat') !== null ){
-                    this.baseFiat = localStorage.getItem('baseFiat')
-                }
-
                 axios.get('https://api.coincap.io/v2/assets')
                     .then(response => ( this.parseApi(response) ))
 
                 axios.get('https://www.floatrates.com/daily/usd.json')
-                    .then(response => ( this.parseFiat(response)))
+                    .then(response => {
+                        this.parseFiat(response)
+                        if(localStorage.getItem('baseFiat') !== null ){
+                            this.baseFiat = localStorage.getItem('baseFiat')
+                        }
+                    })
                     .catch( err => { 
                         console.error(err)
                         this.parseDefaultFiat() 
@@ -227,24 +228,19 @@
                     localStorage.setItem('baseFiat',this.baseFiat)
                 },
                 parseFiat(response) {
-                    try {
-                        if(typeof(response.data.eur) == 'undefined'){
-                            throw "rates unavailable"
-                        }
-                        this.fiat = {"USD":1.0}
-                        
-                        const codes = Object.keys(response.data).sort()
-
-                        codes.forEach(key=>{
-                            const code = response.data[key].code
-                            const rate = response.data[key].rate
-                            this.fiat[code] = rate
-                        })
-                        
-                    } catch (error) {
-                        console.error(error)
-                        this.parseDefaultFiat()
+                    if(typeof(response.data.eur) == 'undefined'){
+                        throw "rates unavailable"
                     }
+                    this.fiat = {"USD":1.0}
+                    
+                    const codes = Object.keys(response.data).sort()
+
+                    codes.forEach(key=>{
+                        const code = response.data[key].code
+                        const rate = response.data[key].rate
+                        this.fiat[code] = rate
+                    })
+                    
                 },
                 parseDefaultFiat(){
                     this.fiat = {"USD":1.0}
